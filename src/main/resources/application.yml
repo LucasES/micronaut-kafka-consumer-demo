@@ -3,6 +3,8 @@ micronaut:
     name: micronaut-kafka-consumer-demo
   server:
     port: 9091
+  h2:
+    console.enabled: true
 
 endpoints:
   health:
@@ -20,3 +22,20 @@ kafka:
       specific.avro.reader: true
       key.deserializer: org.apache.kafka.common.serialization.UUIDDeserializer
       value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+
+datasources:
+  default:
+    url: ${JDBC_URL:`jdbc:h2:mem:hero;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE`}
+    username: ${JDBC_USER:sa}
+    password: ${JDBC_PASSWORD:""}
+    driverClassName: ${JDBC_DRIVER:org.h2.Driver}
+---
+jpa:
+  default:
+    entity-scan:
+      packages: com.lucases.adapter.persistence.model
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true

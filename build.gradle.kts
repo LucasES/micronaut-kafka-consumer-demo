@@ -5,14 +5,21 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.7.4"
     id("io.micronaut.test-resources") version "3.7.4"
+    id( "com.github.davidmc24.gradle.plugin.avro") version "1.6.0"
 }
 
 version = "0.1"
 group = "com.lucases"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
+val kotlinVersion= project.properties["kotlinVersion"]
+val confluenticVersion= project.properties["confluenticVersion"]
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://jitpack.io/")
+        url = uri("https://jcenter.bintray.com")
+        url = uri("https://packages.confluent.io/maven/")
+    }
 }
 
 dependencies {
@@ -26,6 +33,13 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
+
+    implementation("org.apache.avro:avro:1.11.0")
+
+    // Confluent
+    implementation("io.confluent:kafka-schema-registry-client:${confluenticVersion}")
+    implementation("io.confluent:kafka-streams-avro-serde:${confluenticVersion}")
+    implementation("io.confluent:kafka-avro-serializer:${confluenticVersion}")
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
@@ -64,5 +78,17 @@ micronaut {
     }
 }
 
+val generateAvro = tasks.register<com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask>("generateAvro") {
+    source("src/main/resources/avro")
+    this.setOutputDir(file("src/main/java"))
+}
 
+tasks.withType<JavaCompile> {
+    dependsOn("generateAvro")
+}
 
+avro {
+    stringType.set("CharSequence")
+    fieldVisibility.set("private")
+    customConversion(org.apache.avro.Conversions.UUIDConversion::class.java)
+}

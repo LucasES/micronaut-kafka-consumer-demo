@@ -21,6 +21,7 @@ class HeroConsumer (private val heroRepository: HeroRepository) {
         LOGGER.info("Received message: $hero")
 
         heroRepository.save(com.lucases.domain.Hero(
+            null,
             hero.name.toString(),
             hero.power
         ))

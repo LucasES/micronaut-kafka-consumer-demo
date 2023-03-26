@@ -1,26 +1,21 @@
 package com.lucases.adapter.persistence.model
 
 import com.lucases.domain.Hero
-import javax.persistence.*
+import io.micronaut.data.annotation.GeneratedValue
+import io.micronaut.data.annotation.Id
+import io.micronaut.data.annotation.MappedEntity
 
-@Entity
-@Table(name = "hero")
+@MappedEntity("heroes")
 data class HeroEntity(
-
-    @Id
-    @GeneratedValue
-    val id: Long = 0,
-
-    @Column(name = "name")
     val name: String = "",
 
-    @Column(name = "power")
     val power: Double = 0.0
 ) {
+    @GeneratedValue
+    @Id
+    var id: Long? = null
+
     companion object {
-        fun fromDomain(hero: Hero) = HeroEntity(
-            name = hero.name,
-            power = hero.power
-        )
+        fun fromDomain(hero: Hero) = HeroEntity(name = hero.name, power = hero.power)
     }
 }

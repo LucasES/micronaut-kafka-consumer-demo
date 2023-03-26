@@ -23,32 +23,29 @@ repositories {
 }
 
 dependencies {
+    kapt("io.micronaut.data:micronaut-data-processor")
     kapt("io.micronaut:micronaut-http-validation")
     implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.micronaut.kafka:micronaut-kafka")
+    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
-    runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
 
     implementation("org.apache.avro:avro:1.11.0")
-
+    compileOnly("jakarta.persistence:jakarta.persistence-api:3.1.0")
     // Confluent
     implementation("io.confluent:kafka-schema-registry-client:${confluenticVersion}")
     implementation("io.confluent:kafka-streams-avro-serde:${confluenticVersion}")
     implementation("io.confluent:kafka-avro-serializer:${confluenticVersion}")
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-
-    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
-    kapt("io.micronaut.data:micronaut-data-processor")
-
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    implementation("io.micronaut.sql:micronaut-hibernate-jpa")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("ch.qos.logback:logback-classic")
 }
 
 

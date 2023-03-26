@@ -8,8 +8,8 @@ import com.lucases.adapter.persistence.repository.HeroRepository as DBHeroReposi
 
 @Singleton
 class HeroRepositoryImpl(private val heroRepository: DBHeroRepository) : HeroRepository {
-
     override fun save(hero: Hero) {
         heroRepository.save(HeroEntity.fromDomain(hero))
     }
+
 }
